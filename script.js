@@ -44,6 +44,7 @@ function animateParticles() {
     const particles = [];
     const particleCount = getParticleCount();
     const animationContainer = document.querySelector('.animation-container');
+    const backgroundImage = document.querySelector('.background-image');
 
     for (let i = 0; i < particleCount; i++) {
         const particle = createParticle();
@@ -67,6 +68,8 @@ function animateParticles() {
         // Adjust convergence area based on screen size
         const convergenceSize = window.innerWidth <= 480 ? 100 :
                               window.innerWidth <= 768 ? 150 : 192;
+
+        backgroundImage.style.opacity = '0.8';
 
         particles.forEach((particle) => {
             particle.style.transition = 'all 1.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)';
@@ -131,7 +134,9 @@ function resetLogo() {
     const ringPaths = document.querySelectorAll('.ring-path');
     const mainText = document.querySelector('.main-text');
     const subText = document.querySelector('.sub-text');
+    const backgroundImage = document.querySelector('.background-image');
 
+    backgroundImage.style.opacity = '0';
     logoContainer.style.opacity = '0';
 
     // Get the computed transform style to correctly reset scale

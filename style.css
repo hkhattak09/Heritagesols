@@ -211,6 +211,11 @@ body {
         max-height: 300px;
     }
 
+     
+    .logo-text {
+        margin-top: 4vh;
+    }
+
     .main-text {
         font-size: clamp(3rem, 9vw, 8rem);
     }
@@ -233,6 +238,10 @@ body {
         min-height: 120px;
         max-width: 180px;
         max-height: 180px;
+    }
+
+    .logo-text {
+        margin-top: 4vh;
     }
 
     .main-text {

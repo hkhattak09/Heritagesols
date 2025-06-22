@@ -18,7 +18,7 @@ function createParticle() {
     particle.className = 'particle';
 
     const types = ['black', 'gray', 'cyan'];
-    const weights = [0.4, 0.4, 0.2];
+    const weights = [0.4, 0.4, 0.4];
     let random = Math.random();
     let type;
 
@@ -29,9 +29,7 @@ function createParticle() {
     particle.classList.add(type);
 
     const sizeMultiplier = getParticleSize();
-    const size = type === 'cyan' ?
-        (Math.random() * 3 + 1.5) * sizeMultiplier :
-        (Math.random() * 6 + 2) * sizeMultiplier;
+    const size = (Math.random() * 6 + 2) * sizeMultiplier;
 
     particle.style.width = 3 * size + 'px';
     particle.style.height = 3 * size + 'px';
@@ -45,11 +43,13 @@ function createParticle() {
 function animateParticles() {
     const particles = [];
     const particleCount = getParticleCount();
+    const animationContainer = document.querySelector('.animation-container');
 
     for (let i = 0; i < particleCount; i++) {
         const particle = createParticle();
         particles.push(particle);
-        document.body.appendChild(particle);
+        // Append to the animation container instead of the body
+        animationContainer.appendChild(particle);
 
         setTimeout(() => {
             particle.style.opacity = '1';
@@ -90,7 +90,7 @@ function animateParticles() {
                 const subText = document.querySelector('.sub-text');
 
                 logoContainer.style.opacity = '1';
-                logoContainer.style.transform = 'scale(1)';
+                logoContainer.style.transform = logoContainer.style.transform.replace(/scale\([^)]*\)/, 'scale(1)');
 
                 svg.style.opacity = '1';
                 svg.style.transform = 'scale(1)';
@@ -124,6 +124,7 @@ function animateParticles() {
     }, 800);
 }
 
+
 function resetLogo() {
     const logoContainer = document.querySelector('.logo-container');
     const svg = document.querySelector('.logo-icon svg');
@@ -132,7 +133,23 @@ function resetLogo() {
     const subText = document.querySelector('.sub-text');
 
     logoContainer.style.opacity = '0';
-    logoContainer.style.transform = 'scale(0.7)';
+
+    // Get the computed transform style to correctly reset scale
+    const style = getComputedStyle(logoContainer);
+    const matrix = new DOMMatrix(style.transform);
+    // This maintains the translate property from media queries
+    const newTransform = matrix.translate(0, 0).scale(0.7 / matrix.a, 0.7 / matrix.d);
+    // A simpler approach might be needed if the above is too complex
+    // Re-applying the entire transform based on media query state is more robust
+    // For simplicity here, we replace scale, but be aware of the translate issue.
+    const currentTransform = getComputedStyle(logoContainer).transform;
+    if (currentTransform.includes('translate')) {
+         logoContainer.style.transform = logoContainer.style.transform.replace(/scale\([^)]*\)/, 'scale(0.7)');
+    } else {
+        // Fallback for initial state
+        logoContainer.style.transform = 'scale(0.7) translate(-50%, -50%)';
+    }
+
 
     svg.style.opacity = '0';
     svg.style.transform = 'scale(0.9)';
@@ -141,12 +158,14 @@ function resetLogo() {
         ring.style.opacity = '0';
     });
 
+    // Reset text transforms using clamp values from CSS for consistency
     mainText.style.opacity = '0';
-    mainText.style.transform = 'translateY(' + (window.innerWidth <= 480 ? '20px' : '72px') + ')';
+    mainText.style.transform = 'translateY(clamp(20px, 4vw, 72px))';
 
     subText.style.opacity = '0';
-    subText.style.transform = 'translateY(' + (window.innerWidth <= 480 ? '20px' : '72px') + ')';
+    subText.style.transform = 'translateY(clamp(20px, 4vw, 72px))';
 }
+
 
 function restartAnimation() {
     if (animationRunning) return;
@@ -172,6 +191,8 @@ window.addEventListener('orientationchange', () => {
     setTimeout(() => {
         if (!animationRunning) {
             resetLogo();
+            // Optional: restart animation on orientation change
+            // restartAnimation();
         }
     }, 500);
 });
@@ -183,9 +204,12 @@ window.addEventListener('resize', () => {
     resizeTimeout = setTimeout(() => {
         if (!animationRunning) {
             resetLogo();
+            // Optional: restart animation on resize
+            // restartAnimation();
         }
     }, 250);
 });
+
 
 // Prevent zoom on double tap
 let lastTouchEnd = 0;
@@ -196,6 +220,7 @@ document.addEventListener('touchend', function (event) {
     }
     lastTouchEnd = now;
 }, false);
+
 
 window.addEventListener('load', () => {
     setTimeout(() => {

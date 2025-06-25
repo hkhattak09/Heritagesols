@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers - Heritage Business Solutions</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="careers.css">
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link rel="icon" type="image/png" href="Images/tab.png">
+    <link rel="shortcut icon" type="image/png" href="Images/tab.png">
+    <link rel="apple-touch-icon" href="Images/tab.png">
+</head>
+<body>
+    <img src="Images/background.png" alt="Background" class="fixed-background" id="fixedBackground">
+
+    <nav class="navbar visible">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-image-container">
+                    <img src="Images/logo.png" alt="Heritage Business Solutions Logo">
+                </div>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#careers" class="active">Careers</a></li>
+                <li><a href="index.html#core-team">Core Team</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="index.html#activations">Activations</a></li>
+                <li><a href="index.html#events">Events</a></li>
+                <li><a href="index.html#contact">Contact Us</a></li>
+            </ul>
+            <div class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section id="careers" class="careers-hero">
+        <div class="hero-content">
+            <h1>Join Our Team</h1>
+            <p>Build your career with Heritage Business Solutions</p>
+        </div>
+    </section>
+
+    <section class="careers-section">
+        <div class="careers-container">
+            <div class="section-title-container visible">
+                <h2>Open Positions</h2>
+                <div class="section-subtitle">Explore exciting opportunities to grow with us</div>
+            </div>
+
+            <!-- Job Position 1: Coordinator -->
+            <div class="job-card visible">
+                <div class="job-header">
+                    <h3>Coordinator (Management Trainee Leading to Regular Job)</h3>
+                    <div class="job-meta">
+                        <span class="job-type">Full Time</span>
+                        <span class="job-salary">25-35K PKR</span>
+                    </div>
+                </div>
+                
+                <div class="job-details">
+                    <div class="job-info">
+                        <div class="info-row">
+                            <span class="label">Preference:</span>
+                            <span class="value">Male or Female</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">No. of Resources:</span>
+                            <span class="value">2</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Qualification:</span>
+                            <span class="value">Minimum Graduate</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Experience:</span>
+                            <span class="value">Preferably 1-year experience minimum, fresh can also be considered</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Requirements:</span>
+                            <span class="value">Must be fluent in English and have a good command on Microsoft Office</span>
+                        </div>
+                    </div>
+
+                    <div class="job-description">
+                        <h4>Job Description</h4>
+                        <p>Candidate is responsible for helping oversee the successful completion of projects and events. Their duties include performing specialized tasks, managing a team of staff members and establishing relationships with clients, vendors and freelance professionals.</p>
+                        
+                        <h5>Coordinator duties and responsibilities include:</h5>
+                        <ul>
+                            <li>Communicating with clients or employers about project, event or campaign expectations and goals</li>
+                            <li>Collaborating with clients, Vendors & internal team members</li>
+                            <li>Delegating tasks to appropriate team members</li>
+                            <li>Managing deadlines and progress across the team to ensure the project is delivered on time and on budget</li>
+                            <li>Organizing third-party providers and vendors to deliver elements that can't be produced in-house</li>
+                            <li>Overseeing the delivery of projects and adjusting as necessary to ensure they are delivered to specifications and high standards</li>
+                            <li>Collecting and analysing feedback from customers and other project users to gauge satisfaction and success</li>
+                            <li>Timely reporting to client</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="apply-btn" onclick="openApplicationModal('Coordinator')">Apply Now</button>
+            </div>
+
+            <!-- Job Position 2: Project Manager -->
+            <div class="job-card visible">
+                <div class="job-header">
+                    <h3>Project Manager</h3>
+                    <div class="job-meta">
+                        <span class="job-type">Full Time</span>
+                        <span class="job-salary">50-60K PKR</span>
+                    </div>
+                </div>
+                
+                <div class="job-details">
+                    <div class="job-info">
+                        <div class="info-row">
+                            <span class="label">Preference:</span>
+                            <span class="value">Male</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">No. of Resources:</span>
+                            <span class="value">1</span>
+                        </div>
+                    </div>
+
+                    <div class="job-description">
+                        <h4>Job Qualification</h4>
+                        <ul>
+                            <li>Bachelor's Degree in Marketing, Business Management or related fields</li>
+                            <li>At least 4 years of relevant work experience – sales, marketing, trade & channel development</li>
+                            <li>Successful management experience of a sales team / field force</li>
+                            <li>Strong client management and relationship skills</li>
+                            <li>Ability to successfully lead, motivate, maintain and grow an effective team of field managers, team leaders and trade development representatives</li>
+                            <li>Proven ability to develop & implement strategies</li>
+                            <li>A detailed and analytical approach to researching and analyzing opportunities to increase revenue</li>
+                        </ul>
+
+                        <h4>Job Description</h4>
+                        <ul>
+                            <li>Plan, execute, control and finalize marketing projects/promotions according to strict deadlines and within budget</li>
+                            <li>Estimate the resources and participants needed to achieve project goals</li>
+                            <li>Plan and schedule project timelines and milestones using appropriate tools</li>
+                            <li>Develop best practices and tools for project execution and management</li>
+                            <li>Draft and submit budget proposals, and recommend subsequent budget changes where necessary</li>
+                            <li>Track project milestones and deliverables</li>
+                            <li>Define the project's objectives and oversee quality control</li>
+                            <li>Delegate tasks and responsibilities to appropriate personnel</li>
+                            <li>Effectively communicate project expectations to team members and stakeholders</li>
+                            <li>Manage, motivate and supervise project team members and contractors, and influence them to take positive action and accountability for their assigned work</li>
+                            <li>Develop and deliver reports, proposals and requirements documentation</li>
+                            <li>Develop product, brand and customer presentations</li>
+                            <li>Responsible of trend analysis, market research and monitoring</li>
+                            <li>Managing communication between all departments</li>
+                            <li>Liaise with service providers including venue owners for activations</li>
+                            <li>Manage the project budget and overall delivery of the project</li>
+                            <li>Perform any other duties as may be assigned from time to time</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="apply-btn" onclick="openApplicationModal('Project Manager')">Apply Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Modal -->
+    <div id="applicationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Apply for <span id="modalJobTitle"></span></h3>
+                <span class="close-btn" onclick="closeApplicationModal()">&times;</span>
+            </div>
+            
+            <form id="applicationForm" class="application-form">
+                <div class="form-group">
+                    <label for="applicantName">Your Name *</label>
+                    <input type="text" id="applicantName" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="applicantEmail">Your Email *</label>
+                    <input type="email" id="applicantEmail" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="applicantPhone">Your Phone Number *</label>
+                    <input type="tel" id="applicantPhone" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="applicantAddress">Address *</label>
+                    <textarea id="applicantAddress" name="address" rows="2" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="applicantCity">City *</label>
+                    <input type="text" id="applicantCity" name="city" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="employmentStatus">Employment Status *</label>
+                    <select id="employmentStatus" name="employmentStatus" required>
+                        <option value="">Select Status</option>
+                        <option value="Employed">Employed</option>
+                        <option value="Unemployed">Unemployed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="workExperience">Work Experience *</label>
+                    <select id="workExperience" name="workExperience" required>
+                        <option value="">Select Experience</option>
+                        <option value="None">None</option>
+                        <option value="1 Year">1 Year</option>
+                        <option value="2 Years">2 Years</option>
+                        <option value="3 Years">3 Years</option>
+                        <option value="4 Years(+)">4 Years(+)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="resumeFile">Resume / CV *</label>
+                    <input type="file" id="resumeFile" name="resume" accept=".pdf,.doc,.docx" required>
+                    <small>Please upload your resume in PDF, DOC, or DOCX format (Max 5MB)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="comments">Any Comments (Optional)</label>
+                    <textarea id="comments" name="comments" rows="3" placeholder="Tell us why you're interested in this position..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeApplicationModal()">Cancel</button>
+                    <button type="submit" class="submit-btn">Submit Application</button>
+                </div>
+            </form>
+
+            <!-- Loading and Success States -->
+            <div id="loadingState" class="form-state" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>Submitting your application...</p>
+            </div>
+
+            <div id="successState" class="form-state" style="display: none;">
+                <div class="success-icon">✓</div>
+                <h3>Application Submitted!</h3>
+                <p>Thank you for your interest. We'll review your application and get back to you soon.</p>
+                <button class="close-success-btn" onclick="closeApplicationModal()">Close</button>
+            </div>
+
+            <div id="errorState" class="form-state" style="display: none;">
+                <div class="error-icon">✗</div>
+                <h3>Submission Failed</h3>
+                <p id="errorMessage">There was an error submitting your application. Please try again.</p>
+                <button class="retry-btn" onclick="showApplicationForm()">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Copyright © 2025 | Heritage Business Solutions</p>
+    </footer>
+
+    <script src="careers.js"></script>
+</body>
+</html>

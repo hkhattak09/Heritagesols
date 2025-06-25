@@ -197,21 +197,84 @@ function startAnimation() {
     }, 100);
 }
 
-// Enhanced Image Loading System
+// Enhanced Image Loading System with Background Queue and Caching
 class ImageLoader {
     constructor() {
         this.loadedImages = new Set();
         this.imageQueue = [];
         this.isLoading = false;
-        this.observer = null;
-        this.preloadCount = 3; // Number of images to preload initially
+        this.preloadCount = 3; // Number of images to preload immediately
+        this.cache = new Map(); // In-memory cache for loaded images
+        this.cacheKey = 'hbs_image_cache_v1';
+        this.maxCacheAge = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+        
+        // Initialize cache from localStorage
+        this.initializeCache();
+    }
+
+    // Initialize cache from localStorage
+    initializeCache() {
+        try {
+            const cachedData = localStorage.getItem(this.cacheKey);
+            if (cachedData) {
+                const parsed = JSON.parse(cachedData);
+                const now = Date.now();
+                
+                // Filter out expired entries
+                Object.entries(parsed).forEach(([url, data]) => {
+                    if (now - data.timestamp < this.maxCacheAge) {
+                        this.cache.set(url, data);
+                    }
+                });
+            }
+        } catch (error) {
+            console.warn('Failed to load image cache:', error);
+            localStorage.removeItem(this.cacheKey);
+        }
+    }
+
+    // Save cache to localStorage
+    saveCache() {
+        try {
+            const cacheObj = {};
+            this.cache.forEach((value, key) => {
+                cacheObj[key] = value;
+            });
+            localStorage.setItem(this.cacheKey, JSON.stringify(cacheObj));
+        } catch (error) {
+            console.warn('Failed to save image cache:', error);
+        }
+    }
+
+    // Check if image is cached
+    isCached(url) {
+        const cached = this.cache.get(url);
+        if (cached) {
+            const now = Date.now();
+            if (now - cached.timestamp < this.maxCacheAge) {
+                return true;
+            } else {
+                this.cache.delete(url);
+                return false;
+            }
+        }
+        return false;
+    }
+
+    // Add image to cache
+    addToCache(url, success = true) {
+        this.cache.set(url, {
+            url: url,
+            success: success,
+            timestamp: Date.now()
+        });
+        this.saveCache();
     }
 
     // Initialize the image loading system
     init() {
         this.addLoadingCSS();
-        this.setupIntersectionObserver();
-        this.preloadInitialImages();
+        this.queueAllImages();
         this.setupProgressiveLoading();
     }
 
@@ -262,6 +325,19 @@ class ImageLoader {
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
+
+        /* Cache indicator */
+        .cached-indicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 8px;
+            height: 8px;
+            background: #28a745;
+            border-radius: 50%;
+            opacity: 0.7;
+            z-index: 10;
+        }
         `;
 
         const style = document.createElement('style');
@@ -269,29 +345,12 @@ class ImageLoader {
         document.head.appendChild(style);
     }
 
-    // Set up Intersection Observer for lazy loading
-    setupIntersectionObserver() {
-        if ('IntersectionObserver' in window) {
-            this.observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        this.loadImage(entry.target);
-                        this.observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                rootMargin: '50px', // Start loading 50px before the image comes into view
-                threshold: 0.1
-            });
-        }
-    }
-
-    // Preload the first few images that are immediately visible
-    preloadInitialImages() {
+    // Queue all images for background loading (no lazy loading)
+    queueAllImages() {
         const clientCards = document.querySelectorAll('.client-card');
         const cardsPerView = this.getCardsPerView();
         
-        // Load images for initially visible cards
+        // Load images for initially visible cards immediately
         for (let i = 0; i < Math.min(cardsPerView, clientCards.length); i++) {
             const img = clientCards[i].querySelector('img[data-src]');
             if (img) {
@@ -299,29 +358,21 @@ class ImageLoader {
             }
         }
 
-        // Queue the next set for background loading
-        for (let i = cardsPerView; i < Math.min(cardsPerView * 2, clientCards.length); i++) {
+        // Queue ALL remaining images for background loading
+        for (let i = cardsPerView; i < clientCards.length; i++) {
             const img = clientCards[i].querySelector('img[data-src]');
             if (img) {
                 this.imageQueue.push(img);
-            }
-        }
-
-        // Set up lazy loading for the rest
-        for (let i = cardsPerView * 2; i < clientCards.length; i++) {
-            const img = clientCards[i].querySelector('img[data-src]');
-            if (img && this.observer) {
-                this.observer.observe(img);
             }
         }
     }
 
     // Progressive loading of queued images
     setupProgressiveLoading() {
-        // Start loading queued images after initial page load
+        // Start loading all queued images after initial page load
         setTimeout(() => {
             this.processImageQueue();
-        }, 1000);
+        }, 500); // Reduced delay for faster background loading
 
         // Load more images when user interacts with carousel
         const nextBtn = document.getElementById('nextBtn');
@@ -329,13 +380,13 @@ class ImageLoader {
         
         if (nextBtn) {
             nextBtn.addEventListener('click', () => {
-                this.loadUpcomingImages();
+                this.prioritizeUpcomingImages();
             });
         }
         
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
-                this.loadUpcomingImages();
+                this.prioritizeUpcomingImages();
             });
         }
     }
@@ -347,6 +398,11 @@ class ImageLoader {
         const src = img.dataset.src;
         if (!src) return;
 
+        // Check if image is cached and show indicator
+        if (this.isCached(src)) {
+            this.addCacheIndicator(img);
+        }
+
         // Show loading state
         this.showLoadingState(img);
 
@@ -355,10 +411,12 @@ class ImageLoader {
         
         imageObj.onload = () => {
             this.onImageLoad(img, src);
+            this.addToCache(src, true);
         };
         
         imageObj.onerror = () => {
             this.onImageError(img);
+            this.addToCache(src, false);
         };
 
         // Set loading priority
@@ -368,6 +426,17 @@ class ImageLoader {
 
         imageObj.src = src;
         this.loadedImages.add(img);
+    }
+
+    // Add cache indicator
+    addCacheIndicator(img) {
+        const clientCard = img.closest('.client-card');
+        if (clientCard && !clientCard.querySelector('.cached-indicator')) {
+            const indicator = document.createElement('div');
+            indicator.className = 'cached-indicator';
+            indicator.title = 'Cached image';
+            clientCard.appendChild(indicator);
+        }
     }
 
     // Handle successful image load
@@ -427,41 +496,45 @@ class ImageLoader {
         }
     }
 
-    // Process the image queue
+    // Process the entire image queue in the background
     async processImageQueue() {
         if (this.isLoading || this.imageQueue.length === 0) return;
         
         this.isLoading = true;
+        console.log(`Starting background loading of ${this.imageQueue.length} images...`);
         
-        // Load images in batches to avoid overwhelming the browser
-        const batchSize = 2;
+        // Load images in small batches to avoid overwhelming the browser
+        const batchSize = 3; // Increased batch size
+        const batchDelay = 100; // Reduced delay for faster loading
+        
         while (this.imageQueue.length > 0) {
             const batch = this.imageQueue.splice(0, batchSize);
             
             // Load batch concurrently
             const promises = batch.map(img => new Promise(resolve => {
                 this.loadImage(img);
-                setTimeout(resolve, 100); // Small delay between batches
+                setTimeout(resolve, 50); // Small delay between individual images
             }));
             
             await Promise.all(promises);
             
             // Allow other tasks to run
-            await new Promise(resolve => setTimeout(resolve, 50));
+            await new Promise(resolve => setTimeout(resolve, batchDelay));
         }
         
         this.isLoading = false;
+        console.log('Background image loading completed!');
     }
 
-    // Load images that are about to become visible
-    loadUpcomingImages() {
+    // Prioritize upcoming images when user navigates
+    prioritizeUpcomingImages() {
         const carousel = document.querySelector('.clients-carousel');
         if (!carousel) return;
         
         const currentSlide = parseInt(carousel.dataset.currentSlide || '0');
         const cardsPerView = this.getCardsPerView();
         
-        // Load images for next slide
+        // Load images for next slide with high priority
         const nextSlideStart = (currentSlide + 1) * cardsPerView;
         const nextSlideEnd = nextSlideStart + cardsPerView;
         
@@ -469,17 +542,46 @@ class ImageLoader {
         for (let i = nextSlideStart; i < Math.min(nextSlideEnd, clientCards.length); i++) {
             const img = clientCards[i]?.querySelector('img[data-src]');
             if (img) {
-                this.loadImage(img);
+                this.loadImage(img, true); // High priority
             }
         }
     }
 
-    // Get number of cards per view (copied from your existing function)
+    // Get number of cards per view
     getCardsPerView() {
         const width = window.innerWidth;
         if (width <= 480) return 1;
         if (width <= 768) return 2;
         return 3;
+    }
+
+    // Get cache statistics
+    getCacheStats() {
+        const totalCached = this.cache.size;
+        const successfulCached = Array.from(this.cache.values()).filter(item => item.success).length;
+        return {
+            total: totalCached,
+            successful: successfulCached,
+            failed: totalCached - successfulCached
+        };
+    }
+
+    // Clear old cache entries
+    clearOldCache() {
+        const now = Date.now();
+        let cleared = 0;
+        
+        this.cache.forEach((value, key) => {
+            if (now - value.timestamp >= this.maxCacheAge) {
+                this.cache.delete(key);
+                cleared++;
+            }
+        });
+        
+        if (cleared > 0) {
+            this.saveCache();
+            console.log(`Cleared ${cleared} expired cache entries`);
+        }
     }
 }
 
@@ -595,7 +697,7 @@ function updateCarousel() {
 
     // Trigger image loading for upcoming slides
     if (imageLoader) {
-        imageLoader.loadUpcomingImages();
+        imageLoader.prioritizeUpcomingImages();
     }
 }
 
@@ -746,6 +848,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Update total cards count for carousel
     totalCards = document.querySelectorAll('.client-card').length;
+    
+    // Clear old cache entries on page load
+    imageLoader.clearOldCache();
+    
+    // Log cache statistics
+    const cacheStats = imageLoader.getCacheStats();
+    console.log(`Image Cache Stats - Total: ${cacheStats.total}, Successful: ${cacheStats.successful}, Failed: ${cacheStats.failed}`);
 });
 
 // Start animation on page load

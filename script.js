@@ -1,14 +1,13 @@
 let animationRunning = false;
+let animationCompleted = false;
 
 function getParticleCount() {
-    // Reduce particle count on mobile for better performance
     if (window.innerWidth <= 480) return 100;
     if (window.innerWidth <= 768) return 150;
     return 200;
 }
 
 function getParticleSize() {
-    // Scale particle size based on screen size
     const baseSize = window.innerWidth <= 480 ? 0.8 : 1;
     return baseSize;
 }
@@ -40,6 +39,13 @@ function createParticle() {
     return particle;
 }
 
+function setFixedBackground() {
+    const fixedBackground = document.getElementById('fixedBackground');
+    if (fixedBackground) {
+        fixedBackground.style.opacity = '0.8';
+    }
+}
+
 function animateParticles() {
     const particles = [];
     const particleCount = getParticleCount();
@@ -49,7 +55,6 @@ function animateParticles() {
     for (let i = 0; i < particleCount; i++) {
         const particle = createParticle();
         particles.push(particle);
-        // Append to the animation container instead of the body
         animationContainer.appendChild(particle);
 
         setTimeout(() => {
@@ -65,11 +70,11 @@ function animateParticles() {
         const targetX = logoRect.left + logoRect.width / 4;
         const targetY = logoRect.top + logoRect.height / 2;
 
-        // Adjust convergence area based on screen size
         const convergenceSize = window.innerWidth <= 480 ? 100 :
                               window.innerWidth <= 768 ? 150 : 192;
 
         backgroundImage.style.opacity = '0.8';
+        setFixedBackground(); // Set the fixed background
 
         particles.forEach((particle) => {
             particle.style.transition = 'all 1.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)';
@@ -91,6 +96,8 @@ function animateParticles() {
                 const ringPaths = document.querySelectorAll('.ring-path');
                 const mainText = document.querySelector('.main-text');
                 const subText = document.querySelector('.sub-text');
+                const learnMoreBtn = document.querySelector('.learn-more-btn');
+                const navbar = document.querySelector('.navbar'); 
 
                 logoContainer.style.opacity = '1';
                 logoContainer.style.transform = logoContainer.style.transform.replace(/scale\([^)]*\)/, 'scale(1)');
@@ -111,6 +118,11 @@ function animateParticles() {
                     setTimeout(() => {
                         subText.style.opacity = '1';
                         subText.style.transform = 'translateY(0)';
+                        
+                        setTimeout(() => {
+                            learnMoreBtn.classList.add('visible');
+                            navbar.classList.add('visible');
+                        }, 500);
                     }, 300);
                 }, 1200);
 
@@ -121,12 +133,12 @@ function animateParticles() {
                         }
                     });
                     animationRunning = false;
+                    animationCompleted = true;
                 }, 2500);
             }, 600);
         }, 1800);
     }, 800);
 }
-
 
 function resetLogo() {
     const logoContainer = document.querySelector('.logo-container');
@@ -135,26 +147,20 @@ function resetLogo() {
     const mainText = document.querySelector('.main-text');
     const subText = document.querySelector('.sub-text');
     const backgroundImage = document.querySelector('.background-image');
+    const learnMoreBtn = document.querySelector('.learn-more-btn');
 
     backgroundImage.style.opacity = '0';
     logoContainer.style.opacity = '0';
 
-    // Get the computed transform style to correctly reset scale
     const style = getComputedStyle(logoContainer);
     const matrix = new DOMMatrix(style.transform);
-    // This maintains the translate property from media queries
     const newTransform = matrix.translate(0, 0).scale(0.7 / matrix.a, 0.7 / matrix.d);
-    // A simpler approach might be needed if the above is too complex
-    // Re-applying the entire transform based on media query state is more robust
-    // For simplicity here, we replace scale, but be aware of the translate issue.
     const currentTransform = getComputedStyle(logoContainer).transform;
     if (currentTransform.includes('translate')) {
          logoContainer.style.transform = logoContainer.style.transform.replace(/scale\([^)]*\)/, 'scale(0.7)');
     } else {
-        // Fallback for initial state
         logoContainer.style.transform = 'scale(0.7) translate(-50%, -50%)';
     }
-
 
     svg.style.opacity = '0';
     svg.style.transform = 'scale(0.9)';
@@ -163,17 +169,17 @@ function resetLogo() {
         ring.style.opacity = '0';
     });
 
-    // Reset text transforms using clamp values from CSS for consistency
     mainText.style.opacity = '0';
     mainText.style.transform = 'translateY(clamp(20px, 4vw, 72px))';
 
     subText.style.opacity = '0';
     subText.style.transform = 'translateY(clamp(20px, 4vw, 72px))';
+    
+    learnMoreBtn.classList.remove('visible');
 }
 
-
-function restartAnimation() {
-    if (animationRunning) return;
+function startAnimation() {
+    if (animationRunning || animationCompleted) return;
 
     animationRunning = true;
 
@@ -191,13 +197,500 @@ function restartAnimation() {
     }, 100);
 }
 
+// Enhanced Image Loading System
+class ImageLoader {
+    constructor() {
+        this.loadedImages = new Set();
+        this.imageQueue = [];
+        this.isLoading = false;
+        this.observer = null;
+        this.preloadCount = 3; // Number of images to preload initially
+    }
+
+    // Initialize the image loading system
+    init() {
+        this.addLoadingCSS();
+        this.setupIntersectionObserver();
+        this.preloadInitialImages();
+        this.setupProgressiveLoading();
+    }
+
+    // Add CSS for loading states
+    addLoadingCSS() {
+        const loadingCSS = `
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 5;
+            transition: opacity 0.3s ease;
+        }
+
+        .spinner-circle {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(0, 128, 128, 0.1);
+            border-left: 3px solid #008080;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Skeleton loading effect for images */
+        .client-card img[data-src] {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading-shimmer 1.5s infinite;
+        }
+
+        @keyframes loading-shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        `;
+
+        const style = document.createElement('style');
+        style.textContent = loadingCSS;
+        document.head.appendChild(style);
+    }
+
+    // Set up Intersection Observer for lazy loading
+    setupIntersectionObserver() {
+        if ('IntersectionObserver' in window) {
+            this.observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        this.loadImage(entry.target);
+                        this.observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '50px', // Start loading 50px before the image comes into view
+                threshold: 0.1
+            });
+        }
+    }
+
+    // Preload the first few images that are immediately visible
+    preloadInitialImages() {
+        const clientCards = document.querySelectorAll('.client-card');
+        const cardsPerView = this.getCardsPerView();
+        
+        // Load images for initially visible cards
+        for (let i = 0; i < Math.min(cardsPerView, clientCards.length); i++) {
+            const img = clientCards[i].querySelector('img[data-src]');
+            if (img) {
+                this.loadImage(img, true); // High priority
+            }
+        }
+
+        // Queue the next set for background loading
+        for (let i = cardsPerView; i < Math.min(cardsPerView * 2, clientCards.length); i++) {
+            const img = clientCards[i].querySelector('img[data-src]');
+            if (img) {
+                this.imageQueue.push(img);
+            }
+        }
+
+        // Set up lazy loading for the rest
+        for (let i = cardsPerView * 2; i < clientCards.length; i++) {
+            const img = clientCards[i].querySelector('img[data-src]');
+            if (img && this.observer) {
+                this.observer.observe(img);
+            }
+        }
+    }
+
+    // Progressive loading of queued images
+    setupProgressiveLoading() {
+        // Start loading queued images after initial page load
+        setTimeout(() => {
+            this.processImageQueue();
+        }, 1000);
+
+        // Load more images when user interacts with carousel
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                this.loadUpcomingImages();
+            });
+        }
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                this.loadUpcomingImages();
+            });
+        }
+    }
+
+    // Load an individual image
+    loadImage(img, highPriority = false) {
+        if (this.loadedImages.has(img)) return;
+
+        const src = img.dataset.src;
+        if (!src) return;
+
+        // Show loading state
+        this.showLoadingState(img);
+
+        // Create a new image object for preloading
+        const imageObj = new Image();
+        
+        imageObj.onload = () => {
+            this.onImageLoad(img, src);
+        };
+        
+        imageObj.onerror = () => {
+            this.onImageError(img);
+        };
+
+        // Set loading priority
+        if (highPriority && 'loading' in imageObj) {
+            imageObj.loading = 'eager';
+        }
+
+        imageObj.src = src;
+        this.loadedImages.add(img);
+    }
+
+    // Handle successful image load
+    onImageLoad(img, src) {
+        img.src = src;
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 0.3s ease';
+        
+        // Fade in the image
+        requestAnimationFrame(() => {
+            img.style.opacity = '1';
+        });
+
+        this.hideLoadingState(img);
+        img.removeAttribute('data-src');
+    }
+
+    // Handle image load error
+    onImageError(img) {
+        console.warn('Failed to load image:', img.dataset.src);
+        this.hideLoadingState(img);
+        
+        // Show fallback content
+        const clientCard = img.closest('.client-card');
+        if (clientCard) {
+            const clientName = clientCard.querySelector('.client-name');
+            if (clientName) {
+                img.style.display = 'none';
+                clientCard.innerHTML = `<div class="client-placeholder">${clientName.textContent}</div>`;
+            }
+        }
+    }
+
+    // Show loading state
+    showLoadingState(img) {
+        const clientCard = img.closest('.client-card');
+        if (clientCard && !clientCard.querySelector('.loading-spinner')) {
+            const spinner = document.createElement('div');
+            spinner.className = 'loading-spinner';
+            spinner.innerHTML = `
+                <div class="spinner-circle"></div>
+                <div class="loading-text">Loading...</div>
+            `;
+            clientCard.appendChild(spinner);
+        }
+    }
+
+    // Hide loading state
+    hideLoadingState(img) {
+        const clientCard = img.closest('.client-card');
+        const spinner = clientCard?.querySelector('.loading-spinner');
+        if (spinner) {
+            spinner.style.opacity = '0';
+            setTimeout(() => {
+                spinner.remove();
+            }, 300);
+        }
+    }
+
+    // Process the image queue
+    async processImageQueue() {
+        if (this.isLoading || this.imageQueue.length === 0) return;
+        
+        this.isLoading = true;
+        
+        // Load images in batches to avoid overwhelming the browser
+        const batchSize = 2;
+        while (this.imageQueue.length > 0) {
+            const batch = this.imageQueue.splice(0, batchSize);
+            
+            // Load batch concurrently
+            const promises = batch.map(img => new Promise(resolve => {
+                this.loadImage(img);
+                setTimeout(resolve, 100); // Small delay between batches
+            }));
+            
+            await Promise.all(promises);
+            
+            // Allow other tasks to run
+            await new Promise(resolve => setTimeout(resolve, 50));
+        }
+        
+        this.isLoading = false;
+    }
+
+    // Load images that are about to become visible
+    loadUpcomingImages() {
+        const carousel = document.querySelector('.clients-carousel');
+        if (!carousel) return;
+        
+        const currentSlide = parseInt(carousel.dataset.currentSlide || '0');
+        const cardsPerView = this.getCardsPerView();
+        
+        // Load images for next slide
+        const nextSlideStart = (currentSlide + 1) * cardsPerView;
+        const nextSlideEnd = nextSlideStart + cardsPerView;
+        
+        const clientCards = document.querySelectorAll('.client-card');
+        for (let i = nextSlideStart; i < Math.min(nextSlideEnd, clientCards.length); i++) {
+            const img = clientCards[i]?.querySelector('img[data-src]');
+            if (img) {
+                this.loadImage(img);
+            }
+        }
+    }
+
+    // Get number of cards per view (copied from your existing function)
+    getCardsPerView() {
+        const width = window.innerWidth;
+        if (width <= 480) return 1;
+        if (width <= 768) return 2;
+        return 3;
+    }
+}
+
+// Mobile menu toggle
+document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+    document.querySelector('.nav-menu').classList.toggle('active');
+});
+
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Intersection Observer for content animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, observerOptions);
+
+// Observe content blocks
+document.querySelectorAll('.content-block, .mission-vision .block, .section-title-container, .clients-carousel, .testimonial-card').forEach(block => {
+    observer.observe(block);
+});
+
+// Enhanced Carousel Logic with Image Loading Integration
+const carousel = document.querySelector('.clients-carousel');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+let currentSlide = 0;
+let totalCards = 0;
+let imageLoader;
+
+function getCardsPerView() {
+    const width = window.innerWidth;
+    if (width <= 480) return 1;
+    if (width <= 768) return 2;
+    return 3;
+}
+
+function getCardWidth() {
+    const containerWidth = carousel.parentElement.offsetWidth;
+    const cardsPerView = getCardsPerView();
+    const totalGap = 30 * (cardsPerView - 1);
+    return (containerWidth - totalGap) / cardsPerView;
+}
+
+function updateCarouselLayout() {
+    if (!carousel) return;
+    
+    const cardsPerView = getCardsPerView();
+    totalCards = carousel.querySelectorAll('.client-card').length;
+    const totalSlides = Math.ceil(totalCards / cardsPerView);
+    
+    const indicatorContainer = document.querySelector('.carousel-indicators');
+    if (indicatorContainer) {
+        indicatorContainer.innerHTML = ''; 
+        if (totalSlides > 1) {
+            for (let i = 0; i < totalSlides; i++) {
+                const indicator = document.createElement('div');
+                indicator.className = 'indicator';
+                indicator.dataset.slide = i;
+                indicator.addEventListener('click', () => {
+                    currentSlide = i;
+                    updateCarousel();
+                });
+                indicatorContainer.appendChild(indicator);
+            }
+        }
+    }
+}
+
+function updateCarousel() {
+    if (!carousel) return;
+    
+    const cardWidth = getCardWidth();
+    const cardsPerView = getCardsPerView();
+    const scrollPosition = currentSlide * (cardWidth + 30) * cardsPerView;
+    
+    carousel.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+    });
+
+    // Store current slide for image loader
+    carousel.dataset.currentSlide = currentSlide;
+    
+    const indicators = document.querySelectorAll('.indicator');
+    indicators.forEach((indicator, index) => {
+        if (index === currentSlide) {
+            indicator.classList.add('active');
+        } else {
+            indicator.classList.remove('active');
+        }
+    });
+
+    // Trigger image loading for upcoming slides
+    if (imageLoader) {
+        imageLoader.loadUpcomingImages();
+    }
+}
+
+function nextSlide() {
+    const cardsPerView = getCardsPerView();
+    const totalSlides = Math.ceil(totalCards / cardsPerView);
+    currentSlide = (currentSlide + 1) % totalSlides;
+    updateCarousel();
+}
+
+function prevSlide() {
+    const cardsPerView = getCardsPerView();
+    const totalSlides = Math.ceil(totalCards / cardsPerView);
+    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+    updateCarousel();
+}
+
+if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+
+// Touch support for carousel
+let startX = null;
+if (carousel) {
+    carousel.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    });
+
+    carousel.addEventListener('touchend', (e) => {
+        if (!startX) return;
+        
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        }
+        
+        startX = null;
+    });
+}
+
+// Handle window resize
+window.addEventListener('resize', () => {
+    clearTimeout(window.resizeTimer);
+    window.resizeTimer = setTimeout(() => {
+        currentSlide = 0; 
+        updateCarouselLayout(); 
+        updateCarousel(); 
+    }, 250);
+});
+
+// Initialize carousel after DOM load
+setTimeout(() => {
+    updateCarouselLayout();
+    updateCarousel();
+}, 100);
+
+// Simple intersection observer for achievements (no counter animation)
+const achievementObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && entry.target.classList.contains('achievement-card')) {
+            entry.target.classList.add('visible');
+            achievementObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.achievement-card').forEach(card => {
+    achievementObserver.observe(card);
+});
+
+// Intersection observer for the CEC section
+const cecSection = document.querySelector('.cec-section');
+if (cecSection) {
+    const cecObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    cecObserver.observe(cecSection);
+}
+
 // Handle orientation changes
 window.addEventListener('orientationchange', () => {
     setTimeout(() => {
-        if (!animationRunning) {
+        if (!animationRunning && !animationCompleted) {
             resetLogo();
-            // Optional: restart animation on orientation change
-            // restartAnimation();
         }
     }, 500);
 });
@@ -207,14 +700,11 @@ let resizeTimeout;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-        if (!animationRunning) {
+        if (!animationRunning && !animationCompleted) {
             resetLogo();
-            // Optional: restart animation on resize
-            // restartAnimation();
         }
     }, 250);
 });
-
 
 // Prevent zoom on double tap
 let lastTouchEnd = 0;
@@ -226,9 +716,41 @@ document.addEventListener('touchend', function (event) {
     lastTouchEnd = now;
 }, false);
 
+// Update active navigation link on scroll
+window.addEventListener('scroll', () => {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    
+    let current = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (window.pageYOffset >= sectionTop - 200) {
+            current = section.getAttribute('id');
+        }
+    });
 
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+        }
+    });
+});
+
+// Initialize everything when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize image loader
+    imageLoader = new ImageLoader();
+    imageLoader.init();
+    
+    // Update total cards count for carousel
+    totalCards = document.querySelectorAll('.client-card').length;
+});
+
+// Start animation on page load
 window.addEventListener('load', () => {
     setTimeout(() => {
-        restartAnimation();
+        startAnimation();
     }, 500);
 });

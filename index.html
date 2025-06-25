@@ -3,32 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heritage Business Solutions - Logo Animation</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800;900&display=swap">
+    <title>Heritage Business Solutions - Event Management & Brand Activation</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <img src="Images/background.png" alt="Background" class="fixed-background" id="fixedBackground">
 
-<div class="animation-container">
-    <img src="background.png" alt="Background" class="background-image">
-    <button class="restart-btn" onclick="restartAnimation()">Restart Animation</button>
-    <div class="logo-container">
-        <div class="logo-icon">
-            <svg viewBox="0 0 700 600">
-                <path class="ring-path" d="m 329.98,305.15 c -11.16,5.36 -17.37,11.94 -27.52,26.43 -8.62,17.59 -14.36,37.98 -10.56,57.52 2.49,18.63 16.39,35.15 34.52,40.32 21.08,6.11 45.07,5.53 64.21,-6.10 12.79,-7.77 26.25,-17.91 29.91,-33.26 4.74,-18.45 0.60,-39.22 -12.17,-53.60 -14.40,-18.45 -36.21,-30.86 -59.34,-34.15 -5.86,-0.59 -13.54,0.65 -19.05,2.84 z"/>
-                <path class="ring-path" d="m 331.16,221.88 c -3.99,-0.05 -7.98,0.16 -11.92,0.89 -22.99,3.68 -43.18,17.28 -57.35,35.45 -30.89,37.02 -41.61,87.09 -38.14,134.37 0.43,33.68 21.72,65.91 52.06,80.32 39.47,21.00 87.23,17.87 128.40,3.69 32.06,-10.09 59.76,-33.50 75.61,-63.04 17.37,-38.28 9.88,-85.63 -17.30,-117.44 -29.42,-37.29 -70.96,-68.49 -119.40,-73.54 -3.97,-0.32 -7.97,-0.64 -11.96,-0.70 z m -0.576,22.85 c 10.36,-0.21 20.86,1.73 30.86,4.24 23.93,6.01 46.63,22.18 65.05,39.66 15.78,14.98 29.73,32.97 36.83,53.89 8.96,26.22 3.13,56.15 -13.67,77.94 -20.31,26.89 -54.45,37.88 -86.25,43.95 -17.97,4.22 -36.68,3.09 -54.35,-1.94 -25.17,-4.51 -48.18,-21.60 -58.41,-45.19 -7.42,-21.60 -7.74,-45.09 -5.28,-67.58 5.35,-26.56 13.04,-54.26 29.72,-75.58 9.36,-11.96 20.04,-20.61 37.15,-26.37 6.97,-2.00 13.13,-2.90 19.24,-3.02 z"/>
-                <path class="ring-path" d="M 296.33,99.23 C 233.04,101.38 172.87,138.23 142.31,193.78 100.61,264.67 92.78,351.02 104.28,431.20 c 4.62,36.65 18.75,72.43 45.27,98.80 42.45,40.04 103.50,48.65 159.06,55.47 52.59,3.68 106.11,6.29 158.36,-2.22 55.60,-9.19 111.60,-38.57 137.19,-91.00 33.70,-70.95 22.24,-156.97 -13.44,-224.88 C 548.46,194.19 476.86,138.33 396.03,114.13 363.44,106.02 330.06,98.92 296.33,99.23 Z m 32.77,14.40 c 41.81,1.32 81.69,18.54 116.96,40.46 44.58,23.56 85.80,57.04 110.98,100.00 28.33,48.33 46.35,102.78 37.18,163.91 -9.14,60.90 -90.44,129.11 -163.67,147.54 -55.72,14.02 -113.84,13.88 -169.16,0.51 -53.84,-12.99 -107.39,-46.92 -124.61,-101.87 -15.93,-57.55 -15.62,-119.87 1.68,-177.11 17.74,-69.00 62.95,-132.68 127.96,-164.04 13.93,-6.49 29.45,-8.31 44.64,-8.94 6.04,-0.49 12.06,-0.63 18.04,-0.46 z"/>
-                <path class="ring-path" d="m 321.16,156.33 c -4.65,0.14 -9.21,0.51 -13.52,1.12 -36.83,5.26 -57.34,17.15 -89.48,54.63 -32.52,37.93 -55.29,108.44 -56.18,166.71 -0.47,30.65 4.18,61.76 19.19,89.76 29.67,55.34 98.64,79.48 154.77,78.72 29.45,-0.40 88.96,-10.83 130.38,-34.00 37.85,-21.17 65.39,-47.59 82.27,-97.62 C 563.25,372.17 552.65,315.11 519.80,270.62 480.79,217.78 431.40,178.29 360.75,160.27 349.80,157.48 335.10,155.90 321.16,156.33 Z m -3.07,19.14 c 3.49,-0.11 6.98,0.10 10.41,0.65 35.03,5.66 69.81,17.92 99.92,36.68 28.60,17.82 54.62,41.66 73.10,69.84 25.31,38.60 44.77,90.22 25.65,134.21 -22.03,50.67 -69.65,81.36 -115.02,97.31 -31.92,11.22 -67.19,12.21 -101.03,9.80 -44.26,-5.48 -90.52,-26.91 -112.28,-67.73 -12.44,-28.18 -16.97,-59.93 -14.38,-90.29 3.99,-46.72 16.95,-96.17 45.38,-133.15 22.11,-28.76 48.01,-49.44 77.86,-56.01 3.42,-0.75 6.91,-1.19 10.39,-1.31 z"/>
-            </svg>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">
+                <div class="logo-image-container">
+                    <img src="Images/logo.png" alt="Heritage Business Solutions Logo">
+                </div>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#careers">Careers</a></li>
+                <li><a href="#core-team">Core Team</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#activations">Activations</a></li>
+                <li><a href="#events">Events</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ul>
+            <div class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-        <div class="logo-text">
-            <div class="main-text">heritage</div>
-            <div class="sub-text">business solutions</div>
+    </nav>
+
+    <section id="home" class="hero-section">
+        <div class="animation-container">
+            <img src="Images/background.png" alt="Background" class="background-image">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 700 600">
+                        <path class="ring-path" d="m 329.98,305.15 c -11.16,5.36 -17.37,11.94 -27.52,26.43 -8.62,17.59 -14.36,37.98 -10.56,57.52 2.49,18.63 16.39,35.15 34.52,40.32 21.08,6.11 45.07,5.53 64.21,-6.10 12.79,-7.77 26.25,-17.91 29.91,-33.26 4.74,-18.45 0.60,-39.22 -12.17,-53.60 -14.40,-18.45 -36.21,-30.86 -59.34,-34.15 -5.86,-0.59 -13.54,0.65 -19.05,2.84 z"/>
+                        <path class="ring-path" d="m 331.16,221.88 c -3.99,-0.05 -7.98,0.16 -11.92,0.89 -22.99,3.68 -43.18,17.28 -57.35,35.45 -30.89,37.02 -41.61,87.09 -38.14,134.37 0.43,33.68 21.72,65.91 52.06,80.32 39.47,21.00 87.23,17.87 128.40,3.69 32.06,-10.09 59.76,-33.50 75.61,-63.04 17.37,-38.28 9.88,-85.63 -17.30,-117.44 -29.42,-37.29 -70.96,-68.49 -119.40,-73.54 -3.97,-0.32 -7.97,-0.64 -11.96,-0.70 z m -0.576,22.85 c 10.36,-0.21 20.86,1.73 30.86,4.24 23.93,6.01 46.63,22.18 65.05,39.66 15.78,14.98 29.73,32.97 36.83,53.89 8.96,26.22 3.13,56.15 -13.67,77.94 -20.31,26.89 -54.45,37.88 -86.25,43.95 -17.97,4.22 -36.68,3.09 -54.35,-1.94 -25.17,-4.51 -48.18,-21.60 -58.41,-45.19 -7.42,-21.60 -7.74,-45.09 -5.28,-67.58 5.35,-26.56 13.04,-54.26 29.72,-75.58 9.36,-11.96 20.04,-20.61 37.15,-26.37 6.97,-2.00 13.13,-2.90 19.24,-3.02 z"/>
+                        <path class="ring-path" d="M 296.33,99.23 C 233.04,101.38 172.87,138.23 142.31,193.78 100.61,264.67 92.78,351.02 104.28,431.20 c 4.62,36.65 18.75,72.43 45.27,98.80 42.45,40.04 103.50,48.65 159.06,55.47 52.59,3.68 106.11,6.29 158.36,-2.22 55.60,-9.19 111.60,-38.57 137.19,-91.00 33.70,-70.95 22.24,-156.97 -13.44,-224.88 C 548.46,194.19 476.86,138.33 396.03,114.13 363.44,106.02 330.06,98.92 296.33,99.23 Z m 32.77,14.40 c 41.81,1.32 81.69,18.54 116.96,40.46 44.58,23.56 85.80,57.04 110.98,100.00 28.33,48.33 46.35,102.78 37.18,163.91 -9.14,60.90 -90.44,129.11 -163.67,147.54 -55.72,14.02 -113.84,13.88 -169.16,0.51 -53.84,-12.99 -107.39,-46.92 -124.61,-101.87 -15.93,-57.55 -15.62,-119.87 1.68,-177.11 17.74,-69.00 62.95,-132.68 127.96,-164.04 13.93,-6.49 29.45,-8.31 44.64,-8.94 6.04,-0.49 12.06,-0.63 18.04,-0.46 z"/>
+                        <path class="ring-path" d="m 321.16,156.33 c -4.65,0.14 -9.21,0.51 -13.52,1.12 -36.83,5.26 -57.34,17.15 -89.48,54.63 -32.52,37.93 -55.29,108.44 -56.18,166.71 -0.47,30.65 4.18,61.76 19.19,89.76 29.67,55.34 98.64,79.48 154.77,78.72 29.45,-0.40 88.96,-10.83 130.38,-34.00 37.85,-21.17 65.39,-47.59 82.27,-97.62 C 563.25,372.17 552.65,315.11 519.80,270.62 480.79,217.78 431.40,178.29 360.75,160.27 349.80,157.48 335.10,155.90 321.16,156.33 Z m -3.07,19.14 c 3.49,-0.11 6.98,0.10 10.41,0.65 35.03,5.66 69.81,17.92 99.92,36.68 28.60,17.82 54.62,41.66 73.10,69.84 25.31,38.60 44.77,90.22 25.65,134.21 -22.03,50.67 -69.65,81.36 -115.02,97.31 -31.92,11.22 -67.19,12.21 -101.03,9.80 -44.26,-5.48 -90.52,-26.91 -112.28,-67.73 -12.44,-28.18 -16.97,-59.93 -14.38,-90.29 3.99,-46.72 16.95,-96.17 45.38,-133.15 22.11,-28.76 48.01,-49.44 77.86,-56.01 3.42,-0.75 6.91,-1.19 10.39,-1.31 z"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <div class="main-text">heritage</div>
+                    <div class="sub-text">business solutions</div>
+                </div>
+                <a href="#about" class="learn-more-btn">Learn More</a>
+            </div>
         </div>
-    </div>
-</div>
+    </section>
 
-<script src="script.js"></script>
+    <section id="about" class="content-section">
+        <div class="content-container">
+            <div class="content-block">
+                <h2><span class="highlight">HERITAGE</span> Business Solutions</h2>
+                <p><strong>Crafting Experiences, Delivering Excellence.</strong></p>
+                <p>For over seven years, we have been the trusted partner for a premier clientele of multinational and local corporations. As the leading name in event management and brand activation, we turn ambitious visions into unforgettable realities. Our rich expertise ensures flawless execution for any on-ground project, from high-profile international events to nationwide campaigns across Pakistan.</p>
+            </div>
 
+            <div class="mission-vision">
+                <div class="block">
+                    <h3>MISSION</h3>
+                    <div class="subtitle">Your Event, Your Moment. We Handle the Rest.</div>
+                    <p>Our mission is to provide a seamless and magnificent experience for you and your guests. On your special day, your only responsibility is to enjoy the moment. We meticulously handle every detail, ensuring a flawless event so you can relax and create lasting memories.</p>
+                </div>
+                <div class="block">
+                    <h3>VISION</h3>
+                    <div class="subtitle">Extraordinary Experiences. Enduring Relationships.</div>
+                    <p>Our vision is to build lasting partnerships by delivering personal and unique experiences that consistently exceed expectations. Through a commitment to outstanding service, we aim to earn unwavering client satisfaction and forge long-term, loyal relationships.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="clients-section">
+        <div class="section-title-container">
+            <h2>Our Clients</h2>
+            <div class="section-subtitle">Trusted by leading brands across industries</div>
+        </div>
+
+        <div class="testimonial-container-new">
+            <div class="testimonial-card">
+                <div class="quote-icon"></div>
+                <div class="testimonial-text">
+                    We have worked with HB Solutions on a number of events and found them quite capable from idea generation to execution and further being very conscious about the Return On Investment factors for their client. Their client servicing is top notch and they exceed our expectations most of the time by prioritizing our business needs.
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-info">
+                        <h4>Ali Aftab</h4>
+                        <p>Head of Marketing, Joyland Ltd.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clients-carousel-container">
+            <div class="clients-carousel">
+                <!-- Priority load - First 3 images (immediately visible) -->
+                <div class="client-card">
+                    <img data-src="Sponsors/huawei.png" alt="Huawei" loading="eager">
+                    <div class="client-name">Huawei</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/Uber_Logo_Black_RGB.jpg" alt="Uber" loading="eager">
+                    <div class="client-name">Uber</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/jazz.png" alt="Jazz" loading="eager">
+                    <div class="client-name">Jazz</div>
+                </div>
+                
+                <div class="client-card">
+                    <img data-src="Sponsors/nestle.PNG" alt="Nestle">
+                    <div class="client-name">Nestle</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/hyundai.jpg" alt="Hyundai">
+                    <div class="client-name">Hyundai</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/total.PNG" alt="Total">
+                    <div class="client-name">Total</div>
+                </div>
+                
+                <div class="client-card">
+                    <img data-src="Sponsors/hbl.png" alt="HBL">
+                    <div class="client-name">HBL</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/fatima_g.png" alt="Fatima Group">
+                    <div class="client-name">Fatima Group</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/lums.PNG" alt="LUMS">
+                    <div class="client-name">LUMS</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/tecno.png" alt="Tecno">
+                    <div class="client-name">Tecno</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/lake_city.png" alt="Lake City">
+                    <div class="client-name">Lake City</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/nescafe.png" alt="Nescafe">
+                    <div class="client-name">Nescafe</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/fruita_vitals.png" alt="Fruita vitals">
+                    <div class="client-name">Fruita Vitals</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/nesfrutss.jpg" alt="Nesfruta">
+                    <div class="client-name">Nesfruta</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/everyday.png" alt="Everyday">
+                    <div class="client-name">Everyday</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/milo.png" alt="Milo">
+                    <div class="client-name">Milo</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/pirelli.png" alt="Pirelli">
+                    <div class="client-name">Pirelli</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/Packages.png" alt="Packages">
+                    <div class="client-name">Packages Mall</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/Kansai Paint.jpg" alt="Kansai Paints">
+                    <div class="client-name">Kansai Paints</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/mitchells.png" alt="Mitchelles">
+                    <div class="client-name">Mitchelles</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/dayfresh.png" alt="Dayfresh">
+                    <div class="client-name">Dayfresh</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/maggiiiiiii.png" alt="Maggi">
+                    <div class="client-name">Maggi</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/ptc.png" alt="PTC">
+                    <div class="client-name">Pakistan Tobacco Company</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/kashmirr.png" alt="Kashmir">
+                    <div class="client-name">Kashmir</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/qarshi.png" alt="Qarshi">
+                    <div class="client-name">Qarshi</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/streambuddy.PNG" alt="StreamBuddy">
+                    <div class="client-name">StreamBuddy</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/beeta.jpg" alt="Beeta">
+                    <div class="client-name">Beeta</div>
+                </div>
+                <div class="client-card">
+                    <img data-src="Sponsors/Al Moiz.jpg" alt="Al Moiz industries">
+                    <div class="client-name">Al Moiz Industries</div>
+                </div>
+            </div>
+            <div class="carousel-nav">
+                <button class="carousel-btn" id="prevBtn">
+                    <svg fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </button>
+                <div class="carousel-indicators">
+                </div>
+                <button class="carousel-btn" id="nextBtn">
+                    <svg fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="cec-section">
+        <div class="process-flow">
+            <div class="flow-item">CONNECT</div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-item">ENGAGE</div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-item">CONVERT</div>
+        </div>
+    </section>
+
+    <section class="achievements-section">
+        <div class="achievements-container">
+            <div class="section-title-container">
+                <h2>Our Experience</h2>
+                <div class="section-subtitle">Countless stories of impact summarised as numbers</div>
+            </div>
+
+            <div class="achievements-grid">
+                <div class="achievement-card">
+                    <span class="achievement-number" data-target="5051">5051+</span>
+                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                    <div class="achievement-label">Activations</div>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-number" data-target="550">550+</span>
+                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                    <div class="achievement-label">Events</div>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-number" data-target="825">825K+</span>
+                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                    <div class="achievement-label">Doors Visited</div>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-number" data-target="60000">60000+</span>
+                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                    <div class="achievement-label">Schools Visited</div>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-number" data-target="584">584+</span>
+                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                    <div class="achievement-label">Mall Activations</div>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-number" data-target="200">200+</span>
+                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                    <div class="achievement-label">Cities Covered</div>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-number" data-target="700">700+</span>
+                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                    <div class="achievement-label">Road Shows</div>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-number" data-target="12">12 Million+</span>
+                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                    <div class="achievement-label">Contacts</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>Copyright © 2025 | Heritage Business Solutions</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
